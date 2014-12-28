@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/priyank/Development/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.2/support-annotations-21.0.2.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="99373741f99a0556ee293c41e8faa1ca3ae8a4e6">
+        <dex dex="/home/priyank/AndroidStudioProjects/Skiffle/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.2-945906402ca846f34c5e77c9357f756193498211.jar" />
+    </item>
+    <item
+        jar="/home/priyank/AndroidStudioProjects/Skiffle/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/libs/internal_impl-21.0.2.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="962e8b12569c56dbdcf8367eb4eac8bb129cd18f">
+        <dex dex="/home/priyank/AndroidStudioProjects/Skiffle/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.2-7c3d63bf4ebbf38f429cdd9a6d53b29fadc2c9c4.jar" />
+    </item>
+    <item
+        jar="/home/priyank/AndroidStudioProjects/Skiffle/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="d1bf02de1c56d942e7a9d093b8610ba1ef4128e3">
+        <dex dex="/home/priyank/AndroidStudioProjects/Skiffle/app/build/intermediates/pre-dexed/debug/classes-69358817cca34338cf746aee835a633316433cff.jar" />
+    </item>
+    <item
+        jar="/home/priyank/AndroidStudioProjects/Skiffle/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.2/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="7ae2d38807a43b2f2185ff4089a92c790b579e54">
+        <dex dex="/home/priyank/AndroidStudioProjects/Skiffle/app/build/intermediates/pre-dexed/debug/classes-629ef3c5fd2164b5f5d86c17aa71b080b2f68f93.jar" />
+    </item>
+
+</items>

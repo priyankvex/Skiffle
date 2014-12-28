@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/details_background"
+    >
+
+<LinearLayout
+
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+
+    >
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+
+    >
+
+    <ImageView
+        android:id="@+id/details_coverart"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/sample_cover_art"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible"
+        />
+
+    <TextView
+        android:id="@+id/details_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take me to church"
+        android:textSize="18pt"
+        android:textColor="#ffffff"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Artist : Swedish House Mafia"
+        android:id="@+id/details_artist"
+        android:layout_marginTop="26dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="10pt"
+        android:textColor="#ffffff"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Album : The Hunting Party"
+        android:id="@+id/details_album"
+        android:textSize="10pt"
+        android:textColor="#ffffff"
+        android:layout_marginLeft="20dp"
+         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Genre : Dance"
+        android:id="@+id/details_genre"
+        android:textSize="10pt"
+        android:textColor="#ffffff"
+        android:layout_marginLeft="20dp"
+         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Release Date : 10 Dec 2014"
+        android:id="@+id/details_releasedate"
+        android:textSize="10pt"
+        android:textColor="#ffffff"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="4"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        >
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/btn_itunes"
+            android:src="@drawable/btn_itunes"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:layout_gravity="bottom" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/btn_youtube"
+            android:src="@drawable/btn_youtube"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:layout_gravity="bottom" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/btn_grooveshark"
+            android:src="@drawable/btn_grooveshark"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:layout_gravity="bottom" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/btn_favourites"
+            android:src="@drawable/btn_favourites_on"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:layout_gravity="bottom" />
+        </LinearLayout>
+
+
+
+</LinearLayout>
+</ScrollView><!-- From: file:/home/priyank/AndroidStudioProjects/Skiffle/app/src/main/res/layout/activity_details.xml -->
