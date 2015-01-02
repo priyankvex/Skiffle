@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:text="Take me to church"
             android:id="@+id/song_list_item_name"
+            android:textColor="#ffffff"
             />
 
         <TextView
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:text="Hoizer"
             android:id="@+id/song_list_item_artist"
+            android:textColor="#ffffff"
             />
     </LinearLayout>
 

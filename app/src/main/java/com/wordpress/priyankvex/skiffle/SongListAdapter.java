@@ -3,6 +3,7 @@ package com.wordpress.priyankvex.skiffle;
 /**
  * Created by priyank on 26/12/14.
  */
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;

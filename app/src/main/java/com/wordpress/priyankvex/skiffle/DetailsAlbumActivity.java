@@ -1,6 +1,7 @@
 package com.wordpress.priyankvex.skiffle;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -12,6 +13,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,11 +44,20 @@ public class DetailsAlbumActivity extends ActionBarActivity {
 
     Bundle b;
 
-    Bitmap image;
+    boolean songInFavourites = false;
+
+    DatabaseHandler db;
+
+    SQLiteDatabase database;
+
+    Bitmap image= null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        db = new DatabaseHandler(DetailsAlbumActivity.this);
+        database = db.getWritableDatabase();
 
         //Initializing view widgets
         textview_name = (TextView)findViewById(R.id.details_name);
@@ -73,6 +85,18 @@ public class DetailsAlbumActivity extends ActionBarActivity {
         coverArt.setLayoutParams(layoutParams);
         String img170 = b.getString("img170");
         new GetCoverArt().execute(img170);
+
+        //Checking if song is in favourites or not
+        songInFavourites = db.isInFavourites(b);
+
+        if( songInFavourites ){
+            btn_favourites.setImageResource(R.drawable.btn_favourites_on);
+            songInFavourites = true;
+        }
+        else{
+            btn_favourites.setImageResource(R.drawable.btn_favourites_off);
+            songInFavourites = false;
+        }
 
         //Setting the onClick listeners on the image views
         btn_itunes.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +128,31 @@ public class DetailsAlbumActivity extends ActionBarActivity {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
+            }
+        });
+
+        btn_favourites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(songInFavourites){
+                    //song already in favourites. We will remove it
+                    db.deleteFromFavourites(b);
+                    btn_favourites.setImageResource(R.drawable.btn_favourites_off);
+                    Toast toast  = Toast.makeText(DetailsAlbumActivity.this, "Item unpinned from favourites.", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                    songInFavourites = false;
+                }
+                else if( image != null){
+                    //song not present in favorites. we will add the song
+                    db.addFavourites(database, b, image);
+                    btn_favourites.setImageResource(R.drawable.btn_favourites_on);
+                    Toast toast  = Toast.makeText(DetailsAlbumActivity.this, "Whoa! Nice choice. Item pinned to favourites.", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                    songInFavourites = true;
+                }
+
             }
         });
     }
@@ -167,7 +216,7 @@ public class DetailsAlbumActivity extends ActionBarActivity {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT , "Checkout the song " + b.get("name") + " by " + b.get("artist") + ". Shared via: #SkiffleApp");
+        shareIntent.putExtra(Intent.EXTRA_TEXT , "Checkout the album " + b.get("name") + " by " + b.get("artist") + ". Shared via: #SkiffleApp");
         return shareIntent;
     }
 }

@@ -1,8 +1,10 @@
 package com.wordpress.priyankvex.skiffle;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -16,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by priyank on 23/12/14.
@@ -36,12 +38,23 @@ import java.util.Map;
 public class FragmentTopAlbums extends Fragment {
 
     //Globals for the class
-    private final String url = "http://itunes.apple.com/us/rss/topalbums/limit=10/json";
-    List<HashMap> songs = new ArrayList<>();
+    private final String urlEnglish = "http://itunes.apple.com/us/rss/topalbums/limit=10/json";
+    private final String urlHindi = "http://itunes.apple.com/in/rss/topalbums/limit=10/json";
+    private String url = urlEnglish;
+    List<Map> songs = new ArrayList<>();
     List<Bitmap> coverArts = new ArrayList<>();
 
     //ListView widget
     ListView albums_list_view;
+
+    //Lists for main ui thread
+    List<Map> mSongs = new ArrayList<>();
+    List<Bitmap> mCoverArts = new ArrayList<>();
+
+    Activity activity;
+
+    //For progrss dialog
+    private String[] loadingMessages;
 
     /**
      * The fragment argument representing the section number for this
@@ -62,6 +75,32 @@ public class FragmentTopAlbums extends Fragment {
     }
 
     public FragmentTopAlbums() {
+        loadingMessages = new String[20];
+        loadingMessages[0] = "It is still faster then you searching the internet!";
+        loadingMessages[1] = "And enjoy the elevator music";
+        loadingMessages[2] = "a few bits tried to escape, but we caught them";
+        loadingMessages[3] = "the server is powered by a lemon and two electrodes";
+        loadingMessages[4] = "we're testing your patience";
+        loadingMessages[5] = "scouts are searching songs as fast as they can";
+        loadingMessages[6] = "would you prefer chicken, steak, or tofu?";
+        loadingMessages[7] = "and dream of faster computers";
+        loadingMessages[8] = "go ahead -- hold your breath";
+        loadingMessages[9] = "at least you're not on hold";
+        loadingMessages[10] = "as if you had any other choice :P";
+        loadingMessages[11] = "and curse your internet service provider";
+    }
+
+    public static int randInt() {
+
+        // NOTE: Usually this should be a field rather than a method
+        // variable so that it is not re-seeded every call.
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        int randomNum = rand.nextInt((11) + 1);
+
+        return randomNum;
     }
 
     @Override
@@ -69,34 +108,45 @@ public class FragmentTopAlbums extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_top_albums, container, false);
+
+        if( !isNetworkAvailable()){
+            rootView = inflater.inflate(R.layout.empty_list_layout, container, false);
+            return rootView;
+        }
         albums_list_view = (ListView)rootView.findViewById(R.id.list_view_albums);
 
-        DatabaseHandler db = new DatabaseHandler(getActivity());
-        boolean tableEmpty = db.isEmptyTableTop10Albums();
-        if( !tableEmpty ){
-            Log.d("SKIFFLE", "Table is having past update so populating the list with it");
-            fillListWithData();
-        }
 
         //OnClick listener for the songs_list_view
         albums_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Map<String, String> song = DBsongs.get(position);
+                Map<String, String> song = mSongs.get(position);
                 Bundle b = new Bundle();
-                b.putString("img170", song.get("img170"));
                 b.putString("name", song.get("name"));
                 b.putString("album", song.get("album"));
                 b.putString("artist", song.get("artist"));
                 b.putString("genre", song.get("genre"));
-                b.putString("releaseDate", song.get("date"));
-                b.putString("rights", song.get("rights"));
+                b.putString("releaseDate", song.get("releaseDate"));
                 b.putString("iTunesLink", song.get("iTunesLink"));
+                b.putString("img170", song.get("img170"));
                 Intent i = new Intent(getActivity(), DetailsAlbumActivity.class);
                 i.putExtras(b);
                 startActivity(i);
             }
         });
+
+        //Getting the suitable link as per the user preferences.
+        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        String language = prefs.getString("language", "english");
+        Log.d("SKIFFLE", language);
+
+        if(language == null || language.equals("english")){
+            url = urlEnglish;
+        }
+        else{
+            url = urlHindi;
+        }
+        new GetAlbums().execute();
 
         return rootView;
     }
@@ -105,15 +155,7 @@ public class FragmentTopAlbums extends Fragment {
     public void onStart() {
         super.onStart();
 
-        if( isNetworkAvailable()){
-            new GetAlbums().execute();
-        }
-        DatabaseHandler db = new DatabaseHandler(getActivity());
-        boolean tableEmpty = db.isEmptyTableTop10Albums();
-        if( !tableEmpty ){
-            Log.d("SKIFFLE", "Table is having past update so populating the list with it");
-            fillListWithData();
-        }
+
 
     }
 
@@ -129,6 +171,15 @@ public class FragmentTopAlbums extends Fragment {
      * Async task class to get json by making HTTP call
      */
     private class GetAlbums extends AsyncTask<Void, Void, Void> {
+
+        ProgressDialog progress;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            String msg = loadingMessages[randInt()];
+            progress = ProgressDialog.show(getActivity(), "Please Wait",
+                    msg, true);
+        }
 
         @Override
         protected Void doInBackground(Void... arg0) {
@@ -210,45 +261,30 @@ public class FragmentTopAlbums extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            Log.d("SKIFFLE", "In onPostExecute()");
-            // So far : Downloaded all the song info for the top 10 songs
-            // Now storing this info into the database table
-            DatabaseHandler db = new DatabaseHandler(getActivity());
-            {
-                Log.d("SKIFFLE", "Net is working");
-                if(songs.get(9) != null && coverArts.get(9) != null){
-                    try {
-                        Toast.makeText(getActivity(), "Updated with new data", Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    db.addTopAlbums(songs, coverArts);
-                    Log.d("SKIFFLE", "Done with writing the data into the database");
-                }
-                fillListWithData();
-                Log.d("SKIFFLE", "Updated the list with latest data downloaded");
-
-                Log.d("SKIFFLE", "Net is not working, not writing anything into the database");
+            if(progress.isShowing()){
+                progress.dismiss();
             }
+
+            mSongs.clear();
+            mCoverArts.clear();
+            for (int i = 0; i < songs.size(); i++){
+                mSongs.add(songs.get(i));
+            }
+            for (int i = 0; i < coverArts.size(); i++){
+                mCoverArts.add(coverArts.get(i));
+            }
+            SongListAdapter adapter = new SongListAdapter(activity, R.layout.song_list_item_row, mSongs, mCoverArts);
+            albums_list_view.setAdapter(adapter);
+
         }
     }
 
-    List<Map>DBsongs;
-    List<Bitmap>DBcoverArts;
-    private void fillListWithData(){
-        DatabaseHandler db = new DatabaseHandler(getActivity());
-        Map<String, List> map = db.readTopAlbums();
-        DBsongs = map.get("songs");
-        DBcoverArts= map.get("images");
-        Log.d("SKIFFLE", "Done reading the data from database");
-        SongListAdapter adapter = new SongListAdapter(getActivity(), R.layout.song_list_item_row, DBsongs, DBcoverArts);
-        albums_list_view.setAdapter(adapter);
-    }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
+        this.activity = activity;
     }
 }

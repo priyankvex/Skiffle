@@ -1,6 +1,7 @@
 package com.wordpress.priyankvex.skiffle;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -12,6 +13,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,11 +44,22 @@ public class DetailsActivity extends ActionBarActivity {
 
     Bundle b;
 
-    Bitmap image;
+    Bitmap image = null;
+
+    boolean songInFavourites = false;
+
+    DatabaseHandler db;
+
+    SQLiteDatabase database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+
+        db = new DatabaseHandler(DetailsActivity.this);
+        database = db.getWritableDatabase();
 
         //Initializing view widgets
         textview_name = (TextView)findViewById(R.id.details_name);
@@ -65,14 +79,44 @@ public class DetailsActivity extends ActionBarActivity {
         textview_album.setText("Album : " + b.getString("album"));
         textview_releaseDate.setText("Release Date : " + b.getString("releaseDate"));
         textview_genre.setText("Genre : " + b.getString("genre"));
-
-        //Getting the coverArt from the img170 link
         coverArt = (ImageView)findViewById(R.id.details_coverart);
-        int height = (int)getScreenWidth();
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(height, height);
-        coverArt.setLayoutParams(layoutParams);
-        String img170 = b.getString("img170");
-        new GetCoverArt().execute(img170);
+
+        if ( ! ((b.getString("img170")).equals("NA")) ) {
+            //Getting the coverArt from the img170 link
+
+            int height = (int)getScreenWidth();
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(height, height);
+            coverArt.setLayoutParams(layoutParams);
+            String img170 = b.getString("img170");
+            new GetCoverArt().execute(img170);
+        }
+        else{
+            //image is coming from favourites and thus not needed to be downloaded
+            image = db.getCoverArt(database, b);
+            Drawable drawable = new BitmapDrawable(getResources(), image);
+            drawable.setAlpha(100);
+            if(image == null){
+                Log.d("SKIFFLE", "image is null");
+            }
+            else{
+                Log.d("SKIFFLE", "image is not null");
+            }
+            coverArt.setImageDrawable(drawable);
+            coverArt.setVisibility(View.VISIBLE);
+
+        }
+
+        //Checking if song is in favourites or not
+        songInFavourites = db.isInFavourites(b);
+
+        if( songInFavourites ){
+            btn_favourites.setImageResource(R.drawable.btn_favourites_on);
+            songInFavourites = true;
+        }
+        else{
+            btn_favourites.setImageResource(R.drawable.btn_favourites_off);
+            songInFavourites = false;
+        }
 
         //Setting the onClick listeners on the image views
         btn_itunes.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +148,31 @@ public class DetailsActivity extends ActionBarActivity {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
+            }
+        });
+
+        btn_favourites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(songInFavourites){
+                    //song already in favourites. We will remove it
+                    db.deleteFromFavourites(b);
+                    btn_favourites.setImageResource(R.drawable.btn_favourites_off);
+                    Toast toast  = Toast.makeText(DetailsActivity.this, "Item unpinned from favourites.", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                    songInFavourites = false;
+                }
+                else if(image != null){
+                    //song not present in favorites. we will add the song
+                    db.addFavourites(database, b, image);
+                    btn_favourites.setImageResource(R.drawable.btn_favourites_on);
+                    Toast toast  = Toast.makeText(DetailsActivity.this, "Whoa! Nice choice. Item pinned to favourites.", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                    songInFavourites = true;
+                }
+
             }
         });
     }

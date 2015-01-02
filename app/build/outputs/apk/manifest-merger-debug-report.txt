@@ -33,46 +33,58 @@ MERGED from com.android.support:support-v4:21.0.2:16:5
 		ADDED from AndroidManifest.xml:10:9
 	android:theme
 		ADDED from AndroidManifest.xml:12:9
-activity#com.wordpress.priyankvex.skiffle.MainActivity
-ADDED from AndroidManifest.xml:13:9
+activity#com.wordpress.priyankvex.skiffle.Splash
+ADDED from AndroidManifest.xml:14:9
 	android:label
+		ADDED from AndroidManifest.xml:16:13
+	android:name
 		ADDED from AndroidManifest.xml:15:13
-	android:name
-		ADDED from AndroidManifest.xml:14:13
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:16:13
+ADDED from AndroidManifest.xml:17:13
 action#android.intent.action.MAIN
-ADDED from AndroidManifest.xml:17:17
+ADDED from AndroidManifest.xml:18:17
 	android:name
-		ADDED from AndroidManifest.xml:17:25
+		ADDED from AndroidManifest.xml:18:25
 category#android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:19:17
+ADDED from AndroidManifest.xml:20:17
 	android:name
-		ADDED from AndroidManifest.xml:19:27
-activity#com.wordpress.priyankvex.skiffle.DetailsActivity
-ADDED from AndroidManifest.xml:23:9
+		ADDED from AndroidManifest.xml:20:27
+activity#com.wordpress.priyankvex.skiffle.MainActivity
+ADDED from AndroidManifest.xml:24:9
 	android:label
+		ADDED from AndroidManifest.xml:26:13
+	android:name
 		ADDED from AndroidManifest.xml:25:13
-	android:name
-		ADDED from AndroidManifest.xml:24:13
 intent-filter#android.intent.action.MAIN+android.intent.category.DEFAULT
-ADDED from AndroidManifest.xml:26:13
+ADDED from AndroidManifest.xml:27:13
 category#android.intent.category.DEFAULT
-ADDED from AndroidManifest.xml:29:17
+ADDED from AndroidManifest.xml:30:17
 	android:name
-		ADDED from AndroidManifest.xml:29:27
-activity#com.wordpress.priyankvex.skiffle.DetailsAlbumActivity
-ADDED from AndroidManifest.xml:33:9
+		ADDED from AndroidManifest.xml:30:27
+activity#com.wordpress.priyankvex.skiffle.DetailsActivity
+ADDED from AndroidManifest.xml:34:9
 	android:label
+		ADDED from AndroidManifest.xml:36:13
+	android:name
 		ADDED from AndroidManifest.xml:35:13
-	android:name
-		ADDED from AndroidManifest.xml:34:13
-activity#com.wordpress.priyankvex.skiffle.SettingsActivity
-ADDED from AndroidManifest.xml:43:9
+activity#com.wordpress.priyankvex.skiffle.DetailsAlbumActivity
+ADDED from AndroidManifest.xml:44:9
 	android:label
-		ADDED from AndroidManifest.xml:45:13
+		ADDED from AndroidManifest.xml:46:13
 	android:name
-		ADDED from AndroidManifest.xml:44:13
+		ADDED from AndroidManifest.xml:45:13
+activity#com.wordpress.priyankvex.skiffle.ActivitySearchResults
+ADDED from AndroidManifest.xml:54:9
+	android:label
+		ADDED from AndroidManifest.xml:56:13
+	android:name
+		ADDED from AndroidManifest.xml:55:13
+activity#com.wordpress.priyankvex.skiffle.SettingsActivity
+ADDED from AndroidManifest.xml:64:9
+	android:label
+		ADDED from AndroidManifest.xml:66:13
+	android:name
+		ADDED from AndroidManifest.xml:65:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:21.0.2:15:5
