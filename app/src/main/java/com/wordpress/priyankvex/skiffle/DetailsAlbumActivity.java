@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,9 +27,11 @@ import java.net.URL;
 
 /**
  * Created by priyank on 26/12/14.
- * Class to display the details of the song selected from the list.
+ * Class to display the details of the album selected from the list.
+ * It receives intent only from FragmentTopAlbums
  */
 public class DetailsAlbumActivity extends ActionBarActivity {
+
     private TextView textview_name;
     private TextView textview_artist;
     private TextView textview_album;
@@ -162,7 +163,6 @@ public class DetailsAlbumActivity extends ActionBarActivity {
         DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
         //float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
         float dpWidth = displayMetrics.widthPixels;
-        Log.d("SKIFFLE", dpWidth+"");
         return dpWidth;
     }
 
@@ -170,7 +170,6 @@ public class DetailsAlbumActivity extends ActionBarActivity {
         @Override
         protected Void doInBackground(String... params) {
             //Getting the Bitmap from the url of the small coverArt image
-            Log.d("SKIFFLE", "downloading the cover art");
             image = null;
             try{
                 URL smallImageLink = new URL(params[0]);
@@ -183,7 +182,6 @@ public class DetailsAlbumActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Log.d("SKIFFLE", "done with the cover art");
             Drawable drawable = new BitmapDrawable(getResources(), image);
             drawable.setAlpha(100);
 

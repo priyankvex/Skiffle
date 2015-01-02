@@ -10,7 +10,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -34,6 +33,7 @@ import java.util.TimeZone;
 
 /**
  * Created by priyank on 31/12/14.
+ * Shows search results in a list view. Max. items  = 20
  */
 public class ActivitySearchResults extends ActionBarActivity {
     ListView listSearchResults;
@@ -47,9 +47,11 @@ public class ActivitySearchResults extends ActionBarActivity {
     List<Map> mSongs = new ArrayList<>();
     List<Bitmap> mCoverArts = new ArrayList<>();
 
-    //For progrss dialog
+    //For the sake of funny loading messages.
+    //This wil show the world that programmers have the best sense of humor.
     private String[] loadingMessages;
 
+    //Hello world! I am a constructor.
     public ActivitySearchResults(){
         loadingMessages = new String[20];
         loadingMessages[0] = "It is still faster then you searching the internet!";
@@ -102,8 +104,9 @@ public class ActivitySearchResults extends ActionBarActivity {
 
         Bundle b = getIntent().getExtras();
         url = b.getString("url");
+        //Making the content explicit. Because we are the fucking animals.
         url+="&limit=20&explicit=true";
-        Log.d("SKIFFLE", url);
+        //Executing the background thread.
         new GetResults().execute();
     }
 
@@ -115,6 +118,7 @@ public class ActivitySearchResults extends ActionBarActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    //Helper function to generate a randmo integer in range(0,11).
     public static int randInt() {
 
         // NOTE: Usually this should be a field rather than a method
@@ -145,7 +149,7 @@ public class ActivitySearchResults extends ActionBarActivity {
             e.printStackTrace();
         }
         String outputText = outputFormat.format(parsed);
-        Log.d("SKIFFLE", outputText);
+
         return outputText;
     }
 
@@ -167,7 +171,6 @@ public class ActivitySearchResults extends ActionBarActivity {
         @Override
         protected Void doInBackground(Void... arg0) {
 
-            Log.d("SKIFFLE", "Downloading new song data");
             // Creating service handler class instance
             ServiceHandler sh = new ServiceHandler();
 
@@ -182,7 +185,6 @@ public class ActivitySearchResults extends ActionBarActivity {
                     coverArts.clear();
                     JSONObject jsonObj = new JSONObject(jsonStr);
                     JSONArray results = jsonObj.getJSONArray("results");
-                    Log.d("SKIFFLE", results.toString());
 
                     //entry contains array of song objects
                     for(int i = 0; i < results.length(); i++){
@@ -225,15 +227,11 @@ public class ActivitySearchResults extends ActionBarActivity {
 
                         coverArts.add(image);
 
-                        Log.d("SKIFFLE", "size of data : " + Integer.toString(songs.size()));
-
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            } else {
-                Log.d("SKIFFLE", "Couldn't get any data from the url");
             }
 
             return null;
@@ -253,7 +251,9 @@ public class ActivitySearchResults extends ActionBarActivity {
             for (int i = 0; i < coverArts.size(); i++){
                 mCoverArts.add(coverArts.get(i));
             }
-            Log.d("SKIFFLE", "Done with search");
+
+            //Giving user a no result screen. When no results are found.
+            //Pretty obvious. No?
             if(mSongs.isEmpty()){
                 setContentView(R.layout.no_results_layout);
                 return;

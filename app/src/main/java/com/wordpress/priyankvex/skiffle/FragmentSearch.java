@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 /**
  * Created by priyank on 23/12/14.
+ * Class to provide search UI
  */
 public class FragmentSearch extends Fragment {
     
@@ -63,7 +64,6 @@ public class FragmentSearch extends Fragment {
                     b.putString("url", url);
                     Intent i = new Intent(activity, ActivitySearchResults.class);
                     i.putExtras(b);
-                    //Log.d("SKIFFLE", url);
                     startActivity(i);
                 }
             }

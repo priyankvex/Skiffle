@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+/**
+ * Class the show the splash screen on app launch
+ *
+ */
 public class Splash extends Activity {
 
     /** Duration of wait **/

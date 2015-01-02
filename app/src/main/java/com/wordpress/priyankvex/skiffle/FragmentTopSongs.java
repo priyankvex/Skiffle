@@ -34,7 +34,6 @@ import java.util.Random;
 /**
  * Created by priyankvex on 23/12/14.
  * Class to show the top songs from the iTunes chart.
- * Stores the data in a table for offline availability.
  */
 public class FragmentTopSongs extends Fragment {
 
@@ -56,7 +55,7 @@ public class FragmentTopSongs extends Fragment {
     //Activity
     Activity activity;
 
-    //For progrss dialog
+    //For progress dialog
     private String[] loadingMessages;
 
     /**
@@ -140,7 +139,6 @@ public class FragmentTopSongs extends Fragment {
         //Getting the suitable link as per the user preferences.
         SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         String language = prefs.getString("language", "english");
-        Log.d("SKIFFLE", language);
 
         if(language == null || language.equals("english")){
             url = urlEnglish;
@@ -160,7 +158,6 @@ public class FragmentTopSongs extends Fragment {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -188,7 +185,6 @@ public class FragmentTopSongs extends Fragment {
         @Override
         protected Void doInBackground(Void... arg0) {
 
-            Log.d("SKIFFLE", "Downloading new song data");
             // Creating service handler class instance
             ServiceHandler sh = new ServiceHandler();
 
@@ -246,8 +242,6 @@ public class FragmentTopSongs extends Fragment {
                         }
 
                         coverArts.add(image);
-
-                        Log.d("SKIFFLE", "size of data : " + Integer.toString(songs.size()));
 
                     }
 

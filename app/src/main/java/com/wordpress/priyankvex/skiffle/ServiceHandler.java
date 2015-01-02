@@ -2,8 +2,9 @@ package com.wordpress.priyankvex.skiffle;
 
 /**
  * Created by priyank on 22/12/14.
+ * Class for handling http connections.
+ * Do not change.
  */
-
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

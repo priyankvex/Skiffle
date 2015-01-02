@@ -74,6 +74,7 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    //ActionBar titles for fragments
     public void onSectionAttached(int number) {
         switch (number) {
             case 0:

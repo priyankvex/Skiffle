@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,6 +28,7 @@ import java.net.URL;
 /**
  * Created by priyank on 26/12/14.
  * Class to display the details of the song selected from the list.
+ * This activity receives intents from a activities. FragmentTopSongs and FragmentFavourites
  */
 public class DetailsActivity extends ActionBarActivity {
     private TextView textview_name;
@@ -42,6 +42,7 @@ public class DetailsActivity extends ActionBarActivity {
     private ImageView btn_grooveshark;
     private ImageView btn_favourites;
 
+    //Look a bundle :P
     Bundle b;
 
     Bitmap image = null;
@@ -52,12 +53,15 @@ public class DetailsActivity extends ActionBarActivity {
 
     SQLiteDatabase database;
 
+    //Flag to determine whether intent is from FragmentTopSongs or FragmentFavourites
+    boolean favouriteFlag = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-
+        //Objects for database access.
         db = new DatabaseHandler(DetailsActivity.this);
         database = db.getWritableDatabase();
 
@@ -73,6 +77,7 @@ public class DetailsActivity extends ActionBarActivity {
         btn_favourites = (ImageView)findViewById(R.id.btn_favourites);
 
         //setting the text of the TextViews taking from the bundle
+        //It's a fucking fat bundle.
         b = getIntent().getExtras();
         textview_name.setText(b.getString("name"));
         textview_artist.setText("Artist : " + b.getString("artist"));
@@ -82,7 +87,8 @@ public class DetailsActivity extends ActionBarActivity {
         coverArt = (ImageView)findViewById(R.id.details_coverart);
 
         if ( ! ((b.getString("img170")).equals("NA")) ) {
-            //Getting the coverArt from the img170 link
+
+            //Downloading the coverArt from the img170 link over the inernet.
 
             int height = (int)getScreenWidth();
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(height, height);
@@ -91,16 +97,12 @@ public class DetailsActivity extends ActionBarActivity {
             new GetCoverArt().execute(img170);
         }
         else{
+
             //image is coming from favourites and thus not needed to be downloaded
             image = db.getCoverArt(database, b);
+            favouriteFlag = true;
             Drawable drawable = new BitmapDrawable(getResources(), image);
             drawable.setAlpha(100);
-            if(image == null){
-                Log.d("SKIFFLE", "image is null");
-            }
-            else{
-                Log.d("SKIFFLE", "image is not null");
-            }
             coverArt.setImageDrawable(drawable);
             coverArt.setVisibility(View.VISIBLE);
 
@@ -119,6 +121,7 @@ public class DetailsActivity extends ActionBarActivity {
         }
 
         //Setting the onClick listeners on the image views
+
         btn_itunes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,17 +183,17 @@ public class DetailsActivity extends ActionBarActivity {
     //Helper function to get the screen width of the device in dp
     private float getScreenWidth(){
         DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        //float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
         float dpWidth = displayMetrics.widthPixels;
-        Log.d("SKIFFLE", dpWidth+"");
         return dpWidth;
     }
 
+    /**
+     * Background thread to download the cover art from the internet.
+     */
     private class GetCoverArt extends AsyncTask<String, Void, Void>{
         @Override
         protected Void doInBackground(String... params) {
             //Getting the Bitmap from the url of the small coverArt image
-            Log.d("SKIFFLE", "downloading the cover art");
             image = null;
             try{
                 URL smallImageLink = new URL(params[0]);
@@ -203,10 +206,8 @@ public class DetailsActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Log.d("SKIFFLE", "done with the cover art");
             Drawable drawable = new BitmapDrawable(getResources(), image);
             drawable.setAlpha(100);
-
             coverArt.setImageDrawable(drawable);
             coverArt.setVisibility(View.VISIBLE);
         }
@@ -236,7 +237,12 @@ public class DetailsActivity extends ActionBarActivity {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT , "Checkout the song " + b.get("name") + " by " + b.get("artist") + ". Shared via: #SkiffleApp");
+        if( favouriteFlag ){
+            shareIntent.putExtra(Intent.EXTRA_TEXT , "Checkout one of my favourite " + b.get("name") + " by " + b.get("artist") + ". Shared via: #SkiffleApp");
+        }
+        else{
+
+        }
         return shareIntent;
     }
 }

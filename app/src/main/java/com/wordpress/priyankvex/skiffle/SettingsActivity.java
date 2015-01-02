@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -12,6 +11,9 @@ import android.widget.RadioGroup;
 
 /**
  * Created by priyank on 23/12/14.
+ * Shows the UI for settings.
+ * User can choose type songs as Hindi or English.
+ * Charts will be displayed according to the preference of the user.
  */
 public class SettingsActivity extends ActionBarActivity {
 
@@ -43,9 +45,6 @@ public class SettingsActivity extends ActionBarActivity {
             radio_hindi.setChecked(true);
             radio_english.setChecked(false);
         }
-        Log.d("SKIFFLE", language);
-
-
 
         btn_set.setOnClickListener(new View.OnClickListener() {
             @Override

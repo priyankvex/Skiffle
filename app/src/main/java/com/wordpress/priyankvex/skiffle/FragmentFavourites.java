@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import java.util.Map;
 
 /**
  * Created by priyank on 23/12/14.
+ * Shows the pinned favourites of the user taking form the database in a list view.
  */
 public class FragmentFavourites extends Fragment {
 
@@ -96,7 +96,6 @@ public class FragmentFavourites extends Fragment {
         mCoverArts = map.get("images");
         SongListAdapter adapter = new SongListAdapter(activity, R.layout.song_list_item_row, mSongs, mCoverArts);
         listView_favourites.setAdapter(adapter);
-        Log.d("SKIFFLE", Integer.toString(mCoverArts.size()));
     }
 
     @Override

@@ -53,7 +53,7 @@ public class FragmentTopAlbums extends Fragment {
 
     Activity activity;
 
-    //For progrss dialog
+    //For progress dialog
     private String[] loadingMessages;
 
     /**
@@ -138,8 +138,8 @@ public class FragmentTopAlbums extends Fragment {
         //Getting the suitable link as per the user preferences.
         SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         String language = prefs.getString("language", "english");
-        Log.d("SKIFFLE", language);
 
+        //Choosing the url as per user preferences.
         if(language == null || language.equals("english")){
             url = urlEnglish;
         }
@@ -149,14 +149,6 @@ public class FragmentTopAlbums extends Fragment {
         new GetAlbums().execute();
 
         return rootView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-
-
     }
 
     // Helper method to check the network availability on the device.
@@ -184,7 +176,6 @@ public class FragmentTopAlbums extends Fragment {
         @Override
         protected Void doInBackground(Void... arg0) {
 
-            Log.d("SKIFFLE", "Downloading new song data");
             // Creating service handler class instance
             ServiceHandler sh = new ServiceHandler();
 
@@ -242,8 +233,6 @@ public class FragmentTopAlbums extends Fragment {
                         }
 
                         coverArts.add(image);
-
-                        Log.d("SKIFFLE", "size of data albums: " + Integer.toString(songs.size()));
 
                     }
 

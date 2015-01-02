@@ -1,9 +1,5 @@
 package com.wordpress.priyankvex.skiffle;
 
-/**
- * Created by priyank on 26/12/14.
- */
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -18,6 +14,7 @@ import java.util.Map;
 
 /**
  * Created by priyank on 23/12/14.
+ * Custom adapter for list view.
  */
 public class SongListAdapter extends ArrayAdapter<Map> {
 

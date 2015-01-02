@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import java.util.Map;
 
 /**
  * Created by priyank on 23/12/14.
+ * Class for the Home fragment. Wasn't that obvious from the class name.
  */
 public class FragmentHome extends Fragment {
 
@@ -63,14 +63,10 @@ public class FragmentHome extends Fragment {
     Bundle bf2;
     Bundle bf3;
 
-
     Bitmap image1 = null;
     Bitmap image2 = null;
     Bitmap image3 = null;
     Bitmap image4 = null;
-
-
-
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -115,14 +111,12 @@ public class FragmentHome extends Fragment {
         img_fav_1.setLayoutParams(layoutParams);
         img_fav_2.setLayoutParams(layoutParams);
         img_fav_3.setLayoutParams(layoutParams);
+        // height = width. We want a square after all.
         LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(height, height);
         img_song_topper_english.setLayoutParams(layoutParams1);
         img_song_topper_hindi.setLayoutParams(layoutParams1);
         img_album_topper_english.setLayoutParams(layoutParams1);
         img_album_topper_hindi.setLayoutParams(layoutParams1);
-
-
-
 
 
         btn_see_all.setOnClickListener(new View.OnClickListener() {
@@ -208,12 +202,6 @@ public class FragmentHome extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-
-    }
 
     @Override
     public void onResume() {
@@ -224,9 +212,7 @@ public class FragmentHome extends Fragment {
     //Helper function to get the screen width of the device in dp
     private float getScreenWidth(){
         DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        //float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
         float dpWidth = displayMetrics.widthPixels;
-        Log.d("SKIFFLE", dpWidth + "");
         return dpWidth;
     }
 
@@ -308,8 +294,6 @@ public class FragmentHome extends Fragment {
             // Making a request to url and getting response
             String jsonStr = sh.makeServiceCall(url1, ServiceHandler.GET);
 
-            Log.d("SKIFFLE", "Downloading home items");
-
             if (jsonStr != null) {
                 try {
 
@@ -326,13 +310,11 @@ public class FragmentHome extends Fragment {
                         //Storing each element of the song in a string only to bind them in a map later
                         String name = songObj.getJSONObject("im:name").getString("label");
                         JSONArray images = songObj.getJSONArray("im:image");
-                        String img55 = images.getJSONObject(0).getString("label");
                         String img170 = images.getJSONObject(2).getString("label");
                         String album = songObj.getJSONObject("im:collection").getJSONObject("im:name").getString("label");
                         String artist = songObj.getJSONObject("im:artist").getString("label");
                         String genre = songObj.getJSONObject("category").getJSONObject("attributes").getString("term");
                         String releaseDate = songObj.getJSONObject("im:releaseDate").getJSONObject("attributes").getString("label");
-                        String rights = songObj.getJSONObject("rights").getString("label");
                         String iTunesLink = songObj.getJSONObject("id").getString("label");
 
                         //Putting all the downloaded info in the bundle to send to details activity
@@ -343,8 +325,6 @@ public class FragmentHome extends Fragment {
                         b1.putString("genre", genre);
                         b1.putString("releaseDate", releaseDate);
                         b1.putString("iTunesLink", iTunesLink);
-
-
 
                         //Getting the Bitmap from the url of the small coverArt image
                         image1 = null;
@@ -358,16 +338,12 @@ public class FragmentHome extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            } else {
-                Log.e("SKIFFLE", "Couldn't get any data from the url");
             }
 
             //Downloading song topper hindi
 
             // Making a request to url and getting response
             jsonStr = sh.makeServiceCall(url2, ServiceHandler.GET);
-
-            Log.d("SKIFFLE", "Downloading home items");
 
             if (jsonStr != null) {
                 try {
@@ -384,17 +360,14 @@ public class FragmentHome extends Fragment {
                         //Storing each element of the song in a string only to bind them in a map later
                         String name = songObj.getJSONObject("im:name").getString("label");
                         JSONArray images = songObj.getJSONArray("im:image");
-                        String img55 = images.getJSONObject(0).getString("label");
                         String img170 = images.getJSONObject(2).getString("label");
                         String album = songObj.getJSONObject("im:collection").getJSONObject("im:name").getString("label");
                         String artist = songObj.getJSONObject("im:artist").getString("label");
                         String genre = songObj.getJSONObject("category").getJSONObject("attributes").getString("term");
                         String releaseDate = songObj.getJSONObject("im:releaseDate").getJSONObject("attributes").getString("label");
-                        String rights = songObj.getJSONObject("rights").getString("label");
                         String iTunesLink = songObj.getJSONObject("id").getString("label");
 
                         //Binding all this information related to a single song in a map
-                        HashMap<String, String> song = new HashMap<>();
                         b2.putString("name", name);
                         b2.putString("img170", img170);
                         b2.putString("album", album);
@@ -417,11 +390,7 @@ public class FragmentHome extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            } else {
-                Log.e("SKIFFLE", "Couldn't get any data from the url");
             }
-
-
 
             //Downloading album topper english
 
@@ -443,17 +412,14 @@ public class FragmentHome extends Fragment {
                         //Storing each element of the song in a string only to bind them in a map later
                         String name = songObj.getJSONObject("im:name").getString("label");
                         JSONArray images = songObj.getJSONArray("im:image");
-                        String img55 = images.getJSONObject(0).getString("label");
                         String img170 = images.getJSONObject(2).getString("label");
                         String album = songObj.getJSONObject("im:itemCount").getString("label");
                         String artist = songObj.getJSONObject("im:artist").getString("label");
                         String genre = songObj.getJSONObject("category").getJSONObject("attributes").getString("term");
                         String releaseDate = songObj.getJSONObject("im:releaseDate").getJSONObject("attributes").getString("label");
-                        String rights = songObj.getJSONObject("rights").getString("label");
                         String iTunesLink = songObj.getJSONObject("id").getString("label");
 
-                        //Binding all this information related to a single song in a map
-                        HashMap<String, String> song = new HashMap<>();
+                        //Binding all the info into a bundle
                         b3.putString("name", name);
                         b3.putString("img170", img170);
                         b3.putString("album", album);
@@ -461,7 +427,6 @@ public class FragmentHome extends Fragment {
                         b3.putString("genre", genre);
                         b3.putString("releaseDate", releaseDate);
                         b3.putString("iTunesLink", iTunesLink);
-
 
                         //Getting the Bitmap from the url of the small coverArt image
                         image3 = null;
@@ -497,17 +462,13 @@ public class FragmentHome extends Fragment {
                         //Storing each element of the song in a string only to bind them in a map later
                         String name = songObj.getJSONObject("im:name").getString("label");
                         JSONArray images = songObj.getJSONArray("im:image");
-                        String img55 = images.getJSONObject(0).getString("label");
                         String img170 = images.getJSONObject(2).getString("label");
                         String album = songObj.getJSONObject("im:itemCount").getString("label");
                         String artist = songObj.getJSONObject("im:artist").getString("label");
                         String genre = songObj.getJSONObject("category").getJSONObject("attributes").getString("term");
                         String releaseDate = songObj.getJSONObject("im:releaseDate").getJSONObject("attributes").getString("label");
-                        String rights = songObj.getJSONObject("rights").getString("label");
                         String iTunesLink = songObj.getJSONObject("id").getString("label");
 
-                        //Binding all this information related to a single song in a map
-                        HashMap<String, String> song = new HashMap<>();
                         b4.putString("name", name);
                         b4.putString("img170", img170);
                         b4.putString("album", album);
@@ -515,7 +476,6 @@ public class FragmentHome extends Fragment {
                         b4.putString("genre", genre);
                         b4.putString("releaseDate", releaseDate);
                         b4.putString("iTunesLink", iTunesLink);
-
 
                         //Getting the Bitmap from the url of the small coverArt image
                         image4 = null;

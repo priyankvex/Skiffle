@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -19,6 +18,9 @@ import java.util.Map;
 /**
  * Created by priyank on 22/12/14.
  * Class to handle all the database operations and provides functions to perform them.
+ * This code is douche locked. It gives exception if handled by a douche.
+ *
+ * Database has only one table. That stores the pinned favourites of the user.
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -45,6 +47,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        //SQL query to create the table.
         String queryCreateTableTop10Songs = "CREATE TABLE " + TABLE_FAVOURTIES + "( "
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + KEY_NAME + " TEXT, "
@@ -56,16 +60,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_LINK + " TEXT"
                 + ")";
 
-
-
         //Executing the query to create the table for top songs
         db.execSQL(queryCreateTableTop10Songs);
 
-
-        Log.d("SKIFFLE", "Tables created in the database");
-
     }
 
+    //We are just going to replace the database for a version change.
+    //This is not an app to store top secret info after all.
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
@@ -77,30 +78,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
     void addFavourites(SQLiteDatabase db, Bundle b, Bitmap coverArt){
-        /**
-         * @params songs : list of the songs where each element is a map containing all the info about a single song
-         * @params coverArt  : bitmap of the small cover art picture downloaded during the network call
-         */
 
-        {
-            ContentValues values = new ContentValues();
-            values.put(KEY_NAME, b.getString("name")); //1
-            //Converting the respective coverArt to byte[]
-            byte[] image = convertBitmapToByteArray(coverArt);
-            values.put(KEY_IMAGE, image); //2
-            values.put(KEY_ALBUM, b.getString("album")); //4
-            values.put(KEY_ARTIST, b.getString("artist")); //5
-            values.put(KEY_GENRE, b.getString("genre")); //6
-            values.put(KEY_DATE, b.getString("releaseDate")); //7
-            Log.d("SKIFFLE", b.getString("releaseDate"));
-            values.put(KEY_LINK, b.getString("iTunesLink")); //9
+        ContentValues values = new ContentValues();
 
-            //Inserting this content value of a single song into the table
-            db.insert(TABLE_FAVOURTIES, null, values);
+        values.put(KEY_NAME, b.getString("name"));
+        //Converting the respective coverArt to byte[]
+        byte[] image = convertBitmapToByteArray(coverArt);
+        values.put(KEY_IMAGE, image);
+        values.put(KEY_ALBUM, b.getString("album"));
+        values.put(KEY_ARTIST, b.getString("artist"));
+        values.put(KEY_GENRE, b.getString("genre"));
+        values.put(KEY_DATE, b.getString("releaseDate"));
+        values.put(KEY_LINK, b.getString("iTunesLink"));
 
-        }
-
-
+        //Inserting this content value of a single song into the table
+        db.insert(TABLE_FAVOURTIES, null, values);
 
     }
 
@@ -170,7 +162,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);
 
-        //db.close();
     }
 
     boolean isInFavourites(Bundle b) {
@@ -188,12 +179,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-        if(icount >= 1){
-            return true;
-        }
-        else{
-           return false;
-        }
+        return icount >= 1;
     }
 
 
@@ -224,7 +210,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return true;
     }
-
 
 
 }
