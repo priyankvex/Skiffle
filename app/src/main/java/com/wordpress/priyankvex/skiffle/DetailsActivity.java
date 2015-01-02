@@ -241,7 +241,7 @@ public class DetailsActivity extends ActionBarActivity {
             shareIntent.putExtra(Intent.EXTRA_TEXT , "Checkout one of my favourite " + b.get("name") + " by " + b.get("artist") + ". Shared via: #SkiffleApp");
         }
         else{
-
+            shareIntent.putExtra(Intent.EXTRA_TEXT , "Checkout the song " + b.get("name") + " by " + b.get("artist") + ". Shared via: #SkiffleApp");
         }
         return shareIntent;
     }
